@@ -105,7 +105,7 @@
   </head>
   <body>
 
-    <nav class="navbar navbar-light bg-light">
+    <nav class="navbar navbar-light mb-5 bg-light">
       <div class="container-fluid">
         <span class="navbar-brand mb-0 h1"><img src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/icons/speedometer.svg" alt="" width="30" height="24" class="d-inline-block align-text-top"> Waterius</span>
         <span class="navbar-text">
@@ -124,7 +124,7 @@
               <div class="text-muted small"><?= date('d.m.Y H:i:s', $result['datetime']);?></div>
             </div>
             <div class="card-body">
-              <div class="card-title">
+              <div class="card-title border-bottom">
                 <div class="row row-cols-2">
                   <div class="col">
                     <span class="text-danger fs-4 fw-bold"><i class="bi bi-droplet-fill"></i> <?= $result['ch0']?> м<sup>3</sup></span>
@@ -133,22 +133,22 @@
                     <span class="text-primary fs-4 fw-bold"><i class="bi bi-droplet-fill"></i> <?= $result['ch1']?> м<sup>3</sup></span>
                   </div>
                   <div class="col">
-                    <span class="text-secondary">+<?= $result['delta0']/1000?></span>
+                    <span class="text-secondary"><i class="bi bi-plus"></i> <?= $result['delta0']/1000?></span>
                   </div>
                   <div class="col">
-                    <span class="text-secondary">+<?= $result['delta1']/1000?></span>
+                    <span class="text-secondary"><i class="bi bi-plus"></i> <?= $result['delta1']/1000?></span>
                   </div>
                   <div class="col">
-                    <span class="text-secondary small"><i class="bi bi-patch-check-fill"></i> {{ .Check1 }}</span>
+                    <span class="text-secondary small"><i class="bi bi-patch-check-fill"></i> <!--{{ .Check1 }}--></span>
                   </div>
                   <div class="col">
-                    <span class="text-secondary small"><i class="bi bi-patch-check-fill"></i> {{ .Check1 }}</span>
+                    <span class="text-secondary small"><i class="bi bi-patch-check-fill"></i> <!--{{ .Check1 }}--></span>
                   </div>
                   <div class="col">
-                    <span class="text-muted small">№ <?= $result['serial0']?></span>
+                    <span class="text-muted small"><i class="bi bi-hash"></i> <?= $result['serial0']?></span>
                   </div>
                   <div class="col">
-                    <span class="text-muted small">№ <?= $result['serial1']?></span>
+                    <span class="text-muted small"><i class="bi bi-hash"></i> <?= $result['serial1']?></span>
                   </div>
                 </div>
               </div>
@@ -169,7 +169,7 @@
               </div>
             </div>
             <div class="card-footer text-muted">
-              Attiny: v<?= $result['version']?> | ESP: v<?= $result['version_esp']?>
+              ATtiny: v<?= $result['version']?> | ESP: v<?= $result['version_esp']?>
             </div>
           </div>
 
