@@ -113,7 +113,7 @@
 
     <div class="container">
       <div class="row justify-content-md-center">
-        <div class="col-6">
+        <div class="col-md-6">
           <div class="card text-center">
             <div class="card-header">
               <div><i class="bi bi-cpu-fill"></i> <?= $result['key']?></div>
