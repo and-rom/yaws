@@ -46,7 +46,7 @@
         exit;
     }
 
-    if(!file_exists("waterius.db")) {
+    if(file_exists("waterius.db")) {
         $db=new SQLite3("waterius.db");
         $sql="SELECT
                 key,
@@ -67,20 +67,22 @@
         $result = $db->query($sql);
         $result = $result->fetchArray(SQLITE3_ASSOC);
     } else {
-        $result['key'] = "";
-        $result['ch0'] = "";
-        $result['ch1'] = "";
-        $result['delta0'] = "";
-        $result['delta1'] = "";
-        $result['serial0'] = "";
-        $result['serial1'] = "";
-        $result['voltage'] = "";
-        $result['voltage_diff'] = "";
-        $result['voltage_low'] = "";
-        $result['rssi'] = "";
-        $result['version'] = "";
-        $result['version_esp'] = "";
-        $result['datetime'] = "";
+        $result = array (
+            "key" => "",
+            "ch0" => "0",
+            "ch1" => "0",
+            "delta0" => "0",
+            "delta1" => "0",
+            "serial0" => "",
+            "serial1" => "",
+            "voltage" => "",
+            "voltage_diff" => "",
+            "voltage_low" => "",
+            "rssi" => "",
+            "version" => "",
+            "version_esp" => "",
+            "datetime" => "0"
+        );
     }
 ?>
 <!DOCTYPE html>
