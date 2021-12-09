@@ -155,122 +155,122 @@
   <body class="d-flex flex-column h-100">
 
     <main>
-    <nav class="navbar navbar-light mb-3 bg-light">
-      <div class="container-fluid">
-        <span class="navbar-brand mb-0 h1"><img src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/icons/speedometer.svg" alt="" width="30" height="24" class="d-inline-block align-text-top"> Waterius</span>
-        <span class="navbar-text">
-          <a class="" href="https://github.com/dontsovcmc/waterius/"><i class="bi bi-github"></i> waterius</a>
-          <a class="" href="https://github.com/and-rom/yaws/"><i class="bi bi-github"></i> yaws</a>
-        </span>
-      </div>
-    </nav>
+      <nav class="navbar navbar-light mb-3 bg-light">
+        <div class="container-fluid">
+          <span class="navbar-brand mb-0 h1"><img src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/icons/speedometer.svg" alt="" width="30" height="24" class="d-inline-block align-text-top"> Waterius</span>
+          <span class="navbar-text">
+            <a class="" href="https://github.com/dontsovcmc/waterius/"><i class="bi bi-github"></i> waterius</a>
+            <a class="" href="https://github.com/and-rom/yaws/"><i class="bi bi-github"></i> yaws</a>
+          </span>
+        </div>
+      </nav>
 
-    <div id="main-container" class="container">
-      <div id="meter-template" class="meter-container row justify-content-md-center mb-3" style="display:none">
-        <div class="col-md-6">
-          <div class="card text-center">
-            <div class="card-header">
-              <div class="meter-name-container">
-                <i class="bi bi-cpu-fill"></i> <span class="meter-name">{{ .key || .name }}</span>
-                <a class="edit-btn link-secondary" href="#"><i class="bi bi-pencil"></i></a>
+      <div id="main-container" class="container">
+        <div id="meter-template" class="meter-container row justify-content-md-center mb-3" style="display:none">
+          <div class="col-md-6">
+            <div class="card text-center">
+              <div class="card-header">
+                <div class="meter-name-container">
+                  <i class="bi bi-cpu-fill"></i> <span class="meter-name">{{ .key || .name }}</span>
+                  <a class="edit-btn link-secondary" href="#"><i class="bi bi-pencil"></i></a>
+                </div>
+                <form class="meter-name-edit row g-1 align-items-center" style="display:none;">
+                  <div class="col-10">
+                    <div class="input-group">
+                      <div class="input-group-text"><i class="bi bi-cpu-fill"></i></div>
+                      <input type="text" class="form-control" class="meter-name-edit-name" name="data" placeholder="" autocomplete="off" />
+                    </div>
+                  </div>
+                  <div class="col-2">
+                    <button type="submit" class="btn btn-primary">OK</button>
+                  </div>
+                <input type="hidden" name="field" value="name">
+                </form>
+                <div class="text-muted small"><span class="meter-date">{{ date('d.m.Y H:i:s', .datetime) }}</span></div>
               </div>
-              <form class="meter-name-edit row g-1 align-items-center" style="display:none;">
-                <div class="col-10">
-                  <div class="input-group">
-                    <div class="input-group-text"><i class="bi bi-cpu-fill"></i></div>
-                    <input type="text" class="form-control" class="meter-name-edit-name" name="data" placeholder="" autocomplete="off" />
-                  </div>
-                </div>
-                <div class="col-2">
-                  <button type="submit" class="btn btn-primary">OK</button>
-                </div>
-              <input type="hidden" name="field" value="name">
-              </form>
-              <div class="text-muted small"><span class="meter-date">{{ date('d.m.Y H:i:s', .datetime) }}</span></div>
-            </div>
-            <div class="card-body">
-              <div class="card-title border-bottom">
-                <div class="row row-cols-2">
-                  <div class="col">
-                    <span class="text-danger fs-4 fw-bold"><i class="bi bi-droplet-fill"></i> <span class="meter-ch0">{{ .ch0 }}</span> м<sup>3</sup></span>
-                  </div>
-                  <div class="col">
-                    <span class="text-primary fs-4 fw-bold"><i class="bi bi-droplet-fill"></i> <span class="meter-ch1">{{ .ch1 }}</span> м<sup>3</sup></span>
-                  </div>
-                  <div class="col">
-                    <span class="text-secondary"><i class="bi bi-plus"></i> <span class="meter-delta0">{{ .delta0 }}</span></span>
-                  </div>
-                  <div class="col">
-                    <span class="text-secondary"><i class="bi bi-plus"></i> <span class="meter-delta1">{{ .delta1 }}</span></span>
-                  </div>
-                  <div class="col">
-                    <span class="text-secondary small">
-                      <i class="meter-check0-color bi bi-patch-check-fill"></i> <span class="meter-check0-color meter-check0">{{ .check0 }}</span>
-                      <a class="edit-btn link-secondary" href="#"><i class="bi bi-pencil"></i></a>
-                    </span>
-                    <form class="meter-check0-edit row g-1 align-items-center" style="display:none;">
-                      <div class="col-10">
-                        <div class="input-group">
-                          <div class="input-group-text"><i class="bi bi-patch-check-fill"></i></div>
-                          <input type="date" class="form-control" class="meter-check0-edit-check0" name="data" placeholder="" autocomplete="off" />
+              <div class="card-body">
+                <div class="card-title border-bottom">
+                  <div class="row row-cols-2">
+                    <div class="col">
+                      <span class="text-danger fs-4 fw-bold"><i class="bi bi-droplet-fill"></i> <span class="meter-ch0">{{ .ch0 }}</span> м<sup>3</sup></span>
+                    </div>
+                    <div class="col">
+                      <span class="text-primary fs-4 fw-bold"><i class="bi bi-droplet-fill"></i> <span class="meter-ch1">{{ .ch1 }}</span> м<sup>3</sup></span>
+                    </div>
+                    <div class="col">
+                      <span class="text-secondary"><i class="bi bi-plus"></i> <span class="meter-delta0">{{ .delta0 }}</span></span>
+                    </div>
+                    <div class="col">
+                      <span class="text-secondary"><i class="bi bi-plus"></i> <span class="meter-delta1">{{ .delta1 }}</span></span>
+                    </div>
+                    <div class="col">
+                      <span class="text-secondary small">
+                        <i class="meter-check0-color bi bi-patch-check-fill"></i> <span class="meter-check0-color meter-check0">{{ .check0 }}</span>
+                        <a class="edit-btn link-secondary" href="#"><i class="bi bi-pencil"></i></a>
+                      </span>
+                      <form class="meter-check0-edit row g-1 align-items-center" style="display:none;">
+                        <div class="col-10">
+                          <div class="input-group">
+                            <div class="input-group-text"><i class="bi bi-patch-check-fill"></i></div>
+                            <input type="date" class="form-control" class="meter-check0-edit-check0" name="data" placeholder="" autocomplete="off" />
+                          </div>
                         </div>
-                      </div>
-                      <div class="col-2">
-                        <button type="submit" class="btn btn-primary">OK</button>
-                      </div>
-                    <input type="hidden" name="field" value="check0">
-                    </form>
-                  </div>
-                  <div class="col">
-                    <span class="text-secondary small">
-                      <i class="meter-check1-color bi bi-patch-check-fill"></i> <span class="meter-check1-color meter-check1">{{ .check1 }}</span>
-                      <a class="edit-btn link-secondary" href="#"><i class="bi bi-pencil"></i></a>
-                    </span>
-                    <form class="meter-check1-edit row g-1 align-items-center" style="display:none;">
-                      <div class="col-10">
-                        <div class="input-group">
-                          <div class="input-group-text"><i class="bi bi-patch-check-fill"></i></div>
-                          <input type="date" class="form-control" class="meter-check1-edit-check0" name="data" placeholder="" autocomplete="off" />
+                        <div class="col-2">
+                          <button type="submit" class="btn btn-primary">OK</button>
                         </div>
-                      </div>
-                      <div class="col-2">
-                        <button type="submit" class="btn btn-primary">OK</button>
-                      </div>
-                    <input type="hidden" name="field" value="check1">
-                    </form>
-                  </div>
-                  <div class="col">
-                    <span class="text-muted small"><i class="bi bi-hash"></i> <span class="meter-serial0">{{ .serial0 }}</span></span>
-                  </div>
-                  <div class="col">
-                    <span class="text-muted small"><i class="bi bi-hash"></i> <span class="meter-serial1">{{ .serial1 }}</span></span>
+                      <input type="hidden" name="field" value="check0">
+                      </form>
+                    </div>
+                    <div class="col">
+                      <span class="text-secondary small">
+                        <i class="meter-check1-color bi bi-patch-check-fill"></i> <span class="meter-check1-color meter-check1">{{ .check1 }}</span>
+                        <a class="edit-btn link-secondary" href="#"><i class="bi bi-pencil"></i></a>
+                      </span>
+                      <form class="meter-check1-edit row g-1 align-items-center" style="display:none;">
+                        <div class="col-10">
+                          <div class="input-group">
+                            <div class="input-group-text"><i class="bi bi-patch-check-fill"></i></div>
+                            <input type="date" class="form-control" class="meter-check1-edit-check0" name="data" placeholder="" autocomplete="off" />
+                          </div>
+                        </div>
+                        <div class="col-2">
+                          <button type="submit" class="btn btn-primary">OK</button>
+                        </div>
+                      <input type="hidden" name="field" value="check1">
+                      </form>
+                    </div>
+                    <div class="col">
+                      <span class="text-muted small"><i class="bi bi-hash"></i> <span class="meter-serial0">{{ .serial0 }}</span></span>
+                    </div>
+                    <div class="col">
+                      <span class="text-muted small"><i class="bi bi-hash"></i> <span class="meter-serial1">{{ .serial1 }}</span></span>
+                    </div>
                   </div>
                 </div>
+                <div class="card-text">
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                      <span class="meter-voltage-color">
+                        <i class="meter-voltage-icon" class="bi"></i> <span class="meter-voltage">{{ .voltage }}</span> В
+                      </span>
+                    </li>
+                    <li class="list-group-item"><i class="bi bi-lightning-fill"></i> <span class="meter-voltage_diff">{{ .voltage_diff }}</span> мВ</li>
+                    <li class="list-group-item">
+                      <span class="meter-rssi-color">
+                        <i class="meter-rssi-icon" class="bi"></i> <span class="meter-rssi">{{ .rssi }}</span> dBm
+                      </span>
+                    </li>
+                  </ul>
+                </div>
               </div>
-              <div class="card-text">
-                <ul class="list-group list-group-flush">
-                  <li class="list-group-item">
-                    <span class="meter-voltage-color">
-                      <i class="meter-voltage-icon" class="bi"></i> <span class="meter-voltage">{{ .voltage }}</span> В
-                    </span>
-                  </li>
-                  <li class="list-group-item"><i class="bi bi-lightning-fill"></i> <span class="meter-voltage_diff">{{ .voltage_diff }}</span> мВ</li>
-                  <li class="list-group-item">
-                    <span class="meter-rssi-color">
-                      <i class="meter-rssi-icon" class="bi"></i> <span class="meter-rssi">{{ .rssi }}</span> dBm
-                    </span>
-                  </li>
-                </ul>
+              <div class="card-footer text-muted">
+                ATtiny: v<span class="meter-version">{{ .version }}</span> | ESP: v<span class="meter-version_esp">{{ .version_esp }}</span>
               </div>
             </div>
-            <div class="card-footer text-muted">
-              ATtiny: v<span class="meter-version">{{ .version }}</span> | ESP: v<span class="meter-version_esp">{{ .version_esp }}</span>
-            </div>
+
           </div>
-
         </div>
       </div>
-    </div>
     </main>
 
     <footer class="footer mt-auto py-3 bg-light">
