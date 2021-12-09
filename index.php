@@ -164,61 +164,67 @@
       </div>
     </nav>
 
-    <div class="container">
-      <div class="row justify-content-md-center">
+    <div id="main-container" class="container">
+      <div id="meter-template" class="meter-container row justify-content-md-center mb-3" style="display:none">
         <div class="col-md-6">
           <div class="card text-center">
             <div class="card-header">
-              <div><i class="bi bi-cpu-fill"></i> <?= $result['key']?></div>
-              <div class="text-muted small"><?= date('d.m.Y H:i:s', $result['datetime']);?></div>
+              <div class="meter-name-container">
+                <i class="bi bi-cpu-fill"></i> <span class="meter-name">{{ .key || .name }}</span>
+              </div>
+              <div class="text-muted small"><span class="meter-date">{{ date('d.m.Y H:i:s', .datetime) }}</span></div>
             </div>
             <div class="card-body">
               <div class="card-title border-bottom">
                 <div class="row row-cols-2">
                   <div class="col">
-                    <span class="text-danger fs-4 fw-bold"><i class="bi bi-droplet-fill"></i> <?= $result['ch0']?> м<sup>3</sup></span>
+                    <span class="text-danger fs-4 fw-bold"><i class="bi bi-droplet-fill"></i> <span class="meter-ch0">{{ .ch0 }}</span> м<sup>3</sup></span>
                   </div>
                   <div class="col">
-                    <span class="text-primary fs-4 fw-bold"><i class="bi bi-droplet-fill"></i> <?= $result['ch1']?> м<sup>3</sup></span>
+                    <span class="text-primary fs-4 fw-bold"><i class="bi bi-droplet-fill"></i> <span class="meter-ch1">{{ .ch1 }}</span> м<sup>3</sup></span>
                   </div>
                   <div class="col">
-                    <span class="text-secondary"><i class="bi bi-plus"></i> <?= $result['delta0']/1000?></span>
+                    <span class="text-secondary"><i class="bi bi-plus"></i> <span class="meter-delta0">{{ .delta0 }}</span></span>
                   </div>
                   <div class="col">
-                    <span class="text-secondary"><i class="bi bi-plus"></i> <?= $result['delta1']/1000?></span>
+                    <span class="text-secondary"><i class="bi bi-plus"></i> <span class="meter-delta1">{{ .delta1 }}</span></span>
                   </div>
                   <div class="col">
-                    <span class="text-secondary small"><i class="bi bi-patch-check-fill"></i> <!--{{ .Check1 }}--></span>
+                    <span class="text-secondary small">
+                      <i class="meter-check0-color bi bi-patch-check-fill"></i> <span class="meter-check0-color meter-check0">{{ .check0 }}</span>
+                    </span>
                   </div>
                   <div class="col">
-                    <span class="text-secondary small"><i class="bi bi-patch-check-fill"></i> <!--{{ .Check1 }}--></span>
+                    <span class="text-secondary small">
+                      <i class="meter-check1-color bi bi-patch-check-fill"></i> <span class="meter-check1-color meter-check1">{{ .check1 }}</span>
+                    </span>
                   </div>
                   <div class="col">
-                    <span class="text-muted small"><i class="bi bi-hash"></i> <?= $result['serial0']?></span>
+                    <span class="text-muted small"><i class="bi bi-hash"></i> <span class="meter-serial0">{{ .serial0 }}</span></span>
                   </div>
                   <div class="col">
-                    <span class="text-muted small"><i class="bi bi-hash"></i> <?= $result['serial1']?></span>
+                    <span class="text-muted small"><i class="bi bi-hash"></i> <span class="meter-serial1">{{ .serial1 }}</span></span>
                   </div>
                 </div>
               </div>
               <div class="card-text">
                 <ul class="list-group list-group-flush">
                   <li class="list-group-item">
-                    <span class="<?= (boolval($result['voltage_low']) ? 'text-warning' : 'text-success')?>">
-                      <i class="bi <?= (boolval($result['voltage_low']) ? 'bi-battery' : 'bi-battery-half')?>"></i> <?= $result['voltage']?> В
+                    <span class="meter-voltage-color">
+                      <i class="meter-voltage-icon" class="bi"></i> <span class="meter-voltage">{{ .voltage }}</span> В
                     </span>
                   </li>
-                  <li class="list-group-item"><i class="bi bi-lightning-fill"></i> <?= $result['voltage_diff']?> мВ</li>
+                  <li class="list-group-item"><i class="bi bi-lightning-fill"></i> <span class="meter-voltage_diff">{{ .voltage_diff }}</span> мВ</li>
                   <li class="list-group-item">
-                    <span class="<?= ($result['rssi'] < -65 ? "text-danger" : $result['rssi'] < -50 ? "text-warning" : "text-success" )?>">
-                      <i class="bi bi-wifi"></i> <?= $result['rssi']?> dBm
+                    <span class="meter-rssi-color">
+                      <i class="meter-rssi-icon" class="bi"></i> <span class="meter-rssi">{{ .rssi }}</span> dBm
                     </span>
                   </li>
                 </ul>
               </div>
             </div>
             <div class="card-footer text-muted">
-              ATtiny: v<?= $result['version']?> | ESP: v<?= $result['version_esp']?>
+              ATtiny: v<span class="meter-version">{{ .version }}</span> | ESP: v<span class="meter-version_esp">{{ .version_esp }}</span>
             </div>
           </div>
 
