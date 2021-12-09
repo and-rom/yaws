@@ -1,4 +1,14 @@
 <?php
+    if (php_sapi_name() == "cli") {
+        $stdin = fopen('php://stdin', 'r');
+        echo "Login: ";
+        $login = rtrim(fgets($stdin));
+        echo "Password: ";
+        $password = password_hash(rtrim(fgets($stdin)), PASSWORD_DEFAULT);
+        file_put_contents('./.htpassword', $login.":".$password);
+        exit;
+    }
+
     ini_set("precision", 14);
     ini_set("serialize_precision", -1);
     date_default_timezone_set('Europe/Moscow');
