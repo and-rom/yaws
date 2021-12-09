@@ -311,9 +311,9 @@
                             $(".meter-delta0", meterContainer).html(meter.delta0/1000);
                             $(".meter-delta1", meterContainer).html(meter.delta1/1000);
                             $(".meter-check0", meterContainer).html(meter.check0 != "" ? this.dateTime(meter.check0, true) : "");
-                            $(".meter-check0-color", meterContainer).addClass(meter.check0*1000 <= +new Date() ? 'text-danger' : (meter.check0*1000 - +new Date())/86400000 < 180 ? 'text-warning' : '');
+                            $(".meter-check0-color", meterContainer).addClass(meter.check0 && meter.check0*1000 <= +new Date() ? 'text-danger' : meter.check0 && (meter.check0*1000 - +new Date())/86400000 < 180 ? 'text-warning' : '');
                             $(".meter-check1", meterContainer).html(meter.check1 != "" ? this.dateTime(meter.check1, true) : "");
-                            $(".meter-check1-color", meterContainer).addClass(meter.check1*1000 <= +new Date() ? 'text-danger' : (meter.check1*1000 - +new Date())/86400000 < 180 ? 'text-warning' : '');
+                            $(".meter-check1-color", meterContainer).addClass(meter.check1 && meter.check1*1000 <= +new Date() ? 'text-danger' : meter.check1 && (meter.check1*1000 - +new Date())/86400000 < 180 ? 'text-warning' : '');
                             $(".meter-serial0", meterContainer).html(meter.serial0);
                             $(".meter-serial1", meterContainer).html(meter.serial1);
                             $(".meter-voltage", meterContainer).html(meter.voltage);
