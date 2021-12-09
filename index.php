@@ -59,43 +59,79 @@
         exit;
     }
 
-    if(file_exists("waterius.db")) {
-        $db=new SQLite3("waterius.db");
-        $sql="SELECT
-                key,
-                ch0,
-                ch1,
-                delta0,
-                delta1,
-                serial0,
-                serial1,
-                voltage,
-                voltage_diff,
-                voltage_low,
-                rssi,
-                version,
-                version_esp,
-                datetime
-            FROM meter ORDER BY id DESC LIMIT 1";
-        $result = $db->query($sql);
-        $result = $result->fetchArray(SQLITE3_ASSOC);
-    } else {
-        $result = array (
-            "key" => "",
-            "ch0" => "0",
-            "ch1" => "0",
-            "delta0" => "0",
-            "delta1" => "0",
-            "serial0" => "",
-            "serial1" => "",
-            "voltage" => "",
-            "voltage_diff" => "",
-            "voltage_low" => "",
-            "rssi" => "",
-            "version" => "",
-            "version_esp" => "",
-            "datetime" => "0"
-        );
+    $response = new stdClass;
+
+    if (isset($_GET) && count($_GET)) {
+
+        $action = (isset($_GET['action']) ? $_GET['action'] : "");
+
+        switch ($action) {
+            case "data":
+                if(file_exists("waterius.db")) {
+                    $db=new SQLite3("waterius.db");
+                    $sql = "SELECT key, name, check0, check1 FROM meters";
+                    $meters = $db->query($sql);
+                    while($meter = $meters->fetchArray(SQLITE3_ASSOC)) {
+                        $sql="SELECT
+                                key,
+                                ch0,
+                                ch1,
+                                delta0,
+                                delta1,
+                                serial0,
+                                serial1,
+                                voltage,
+                                voltage_diff,
+                                voltage_low,
+                                rssi,
+                                version,
+                                version_esp,
+                                datetime
+                            FROM data
+                            WHERE key = '".$meter['key']."'
+                            ORDER BY id DESC LIMIT 1";
+                        $data = $db->query($sql);
+                        $data = $data->fetchArray(SQLITE3_ASSOC);
+                        $data['name'] = $meter['name'] ? $meter['name'] : "";
+                        $data['check0'] = $meter['check0'] ? $meter['check0'] : "";
+                        $data['check1'] = $meter['check1'] ? $meter['check1'] : "";
+                        $response->meters[] = $data;
+                    }
+                } else {
+                    $response->meters[] = array (
+                        "key" => "",
+                        "ch0" => "0",
+                        "ch1" => "0",
+                        "delta0" => "0",
+                        "delta1" => "0",
+                        "serial0" => "",
+                        "serial1" => "",
+                        "voltage" => "",
+                        "voltage_diff" => "",
+                        "voltage_low" => "",
+                        "rssi" => "",
+                        "version" => "",
+                        "version_esp" => "",
+                        "datetime" => "0"
+                    );
+                }
+                $response->code = 200;
+                break;
+            case "set":
+                $data = $_GET['type'] == "date" ? strtotime($_GET['data']) : $_GET['data'];
+                $db=new SQLite3("waterius.db");
+                $sql = "UPDATE meters SET ".$_GET['field']." = '".$data."' WHERE key = '".$_GET['key']."'";
+                $db->query($sql);
+                $response->code = 200;
+                break;
+            default:
+                $response->msg = "Method Not Allowed";
+                $response->code = 405;
+                break;
+        }
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode($response ,JSON_UNESCAPED_UNICODE);
+    exit;
     }
 ?>
 <!DOCTYPE html>
