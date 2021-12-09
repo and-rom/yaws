@@ -154,6 +154,7 @@
   </head>
   <body class="d-flex flex-column h-100">
 
+    <main>
     <nav class="navbar navbar-light mb-3 bg-light">
       <div class="container-fluid">
         <span class="navbar-brand mb-0 h1"><img src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/icons/speedometer.svg" alt="" width="30" height="24" class="d-inline-block align-text-top"> Waterius</span>
@@ -270,6 +271,7 @@
         </div>
       </div>
     </div>
+    </main>
 
     <footer class="footer mt-auto py-3 bg-light">
       <div class="container">
