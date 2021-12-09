@@ -1,11 +1,13 @@
 <?php
+    ini_set("precision", 14);
+    ini_set("serialize_precision", -1);
     date_default_timezone_set('Europe/Moscow');
 
     if ($json = file_get_contents("php://input")) {
         if ($obj = json_decode($json, true)) {
             if(!file_exists("waterius.db")) {
                 $db=new SQLite3("waterius.db");
-                $sql="CREATE TABLE meter (
+                $sql="CREATE TABLE data (
                     id INTEGER PRIMARY KEY,
                     imp0 INTEGER,
                     imp1 INTEGER,
@@ -36,11 +38,22 @@
                     model INTEGER,
                     datetime INTEGER)";
                 $db->query($sql);
+                $sql="CREATE TABLE meters (
+                    id INTEGER PRIMARY KEY,
+                    key TEXT,
+                    name TEXT,
+                    check0 INTEGER,
+                    check1 INTEGER,
+                    UNIQUE(key))";
+                $db->query($sql);
             } else {
                $db = new SQLite3('waterius.db');
             }
 
-            $sql = "INSERT INTO meter (".implode(",", array_keys($obj)).", datetime) VALUES ('".implode("','",array_values($obj))."', strftime('%s','now'))";
+            $sql="INSERT OR IGNORE INTO meters (key) VALUES('".$obj['key']."')";
+            $db->query($sql);
+
+            $sql = "INSERT INTO data (".implode(",", array_keys($obj)).", datetime) VALUES ('".implode("','",array_values($obj))."', strftime('%s','now'))";
             $db->query($sql);
         }
         exit;
