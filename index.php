@@ -240,5 +240,72 @@
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        var app = {
+            update: function () {
+                $.ajax({
+                    dataType: "json",
+                    url: "./",
+                    async: true,
+                    data: {
+                        action:     "data"
+                    },
+                    context: this,
+                    success: this.display,
+                    error: this.error
+                });
+            },
+            display: function (data) {
+                switch (data.code) {
+                case 200:
+                    if (data.meters.length != 0) {
+                        data.meters.forEach((meter) => {
+                            var meterContainer = $("#meter-template").clone()
+                            $(meterContainer).attr('id', meter.key);
+                            $(meterContainer).attr('style', meter.key);
+                            $(".meter-name", meterContainer).html(meter.name != "" ? meter.name : meter.key);
+                            $(".meter-date", meterContainer).html(this.dateTime(meter.datetime));
+                            $(".meter-ch0", meterContainer).html(meter.ch0);
+                            $(".meter-ch1", meterContainer).html(meter.ch1);
+                            $(".meter-delta0", meterContainer).html(meter.delta0/1000);
+                            $(".meter-delta1", meterContainer).html(meter.delta1/1000);
+                            $(".meter-check0", meterContainer).html(meter.check0 != "" ? this.dateTime(meter.check0, true) : "");
+                            $(".meter-check0-color", meterContainer).addClass(meter.check0*1000 <= +new Date() ? 'text-danger' : (meter.check0*1000 - +new Date())/86400000 < 180 ? 'text-warning' : '');
+                            $(".meter-check1", meterContainer).html(meter.check1 != "" ? this.dateTime(meter.check1, true) : "");
+                            $(".meter-check1-color", meterContainer).addClass(meter.check1*1000 <= +new Date() ? 'text-danger' : (meter.check1*1000 - +new Date())/86400000 < 180 ? 'text-warning' : '');
+                            $(".meter-serial0", meterContainer).html(meter.serial0);
+                            $(".meter-serial1", meterContainer).html(meter.serial1);
+                            $(".meter-voltage", meterContainer).html(meter.voltage);
+                            $(".meter-voltage-color", meterContainer).addClass(meter.voltage_low == "1" ? 'text-warning' : 'text-success');
+                            $(".meter-voltage-icon", meterContainer).addClass(meter.voltage_low == "1" ? 'bi-battery' : 'bi-battery-half');
+                            $(".meter-voltage_diff", meterContainer).html(meter.voltage_diff);
+                            $(".meter-rssi", meterContainer).html(meter.rssi);
+                            $(".meter-rssi-color", meterContainer).addClass(meter.rssi < -65 ? 'text-danger' : meter.rssi < -50 ? 'text-warning' : 'text-success');
+                            $(".meter-rssi-icon", meterContainer).addClass(meter.rssi < -65 ? 'bi-wifi-1' : meter.rssi < -50 ? 'bi-wifi-2' : 'bi-wifi');
+                            $(".meter-version", meterContainer).html(meter.version);
+                            $(".meter-version_esp", meterContainer).html(meter.version_esp);
+                            $(meterContainer).appendTo("#main-container")
+                        });
+                        $(".edit-btn").on('click', this.edit);
+                        $("form").submit(this.set);
+                    }
+                    break;
+                default:
+                    console.log(data.msg);
+                break;
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log("Update error!");
+            },
+            dateTime: function (timestamp, dateOnly = false) {
+                var pubDate = new Date(timestamp * 1000);
+
+                return pubDate.toLocaleDateString() + (dateOnly ? "" : " " + pubDate.toLocaleTimeString());
+            }
+        }
+
+        $(document).ready(app.update());
+    </script>
   </body>
 </html>
