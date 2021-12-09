@@ -171,7 +171,20 @@
             <div class="card-header">
               <div class="meter-name-container">
                 <i class="bi bi-cpu-fill"></i> <span class="meter-name">{{ .key || .name }}</span>
+                <a class="edit-btn link-secondary" href="#"><i class="bi bi-pencil"></i></a>
               </div>
+              <form class="meter-name-edit row g-1 align-items-center" style="display:none;">
+                <div class="col-10">
+                  <div class="input-group">
+                    <div class="input-group-text"><i class="bi bi-cpu-fill"></i></div>
+                    <input type="text" class="form-control" class="meter-name-edit-name" name="data" placeholder="" autocomplete="off" />
+                  </div>
+                </div>
+                <div class="col-2">
+                  <button type="submit" class="btn btn-primary">OK</button>
+                </div>
+              <input type="hidden" name="field" value="name">
+              </form>
               <div class="text-muted small"><span class="meter-date">{{ date('d.m.Y H:i:s', .datetime) }}</span></div>
             </div>
             <div class="card-body">
@@ -192,12 +205,38 @@
                   <div class="col">
                     <span class="text-secondary small">
                       <i class="meter-check0-color bi bi-patch-check-fill"></i> <span class="meter-check0-color meter-check0">{{ .check0 }}</span>
+                      <a class="edit-btn link-secondary" href="#"><i class="bi bi-pencil"></i></a>
                     </span>
+                    <form class="meter-check0-edit row g-1 align-items-center" style="display:none;">
+                      <div class="col-10">
+                        <div class="input-group">
+                          <div class="input-group-text"><i class="bi bi-patch-check-fill"></i></div>
+                          <input type="date" class="form-control" class="meter-check0-edit-check0" name="data" placeholder="" autocomplete="off" />
+                        </div>
+                      </div>
+                      <div class="col-2">
+                        <button type="submit" class="btn btn-primary">OK</button>
+                      </div>
+                    <input type="hidden" name="field" value="check0">
+                    </form>
                   </div>
                   <div class="col">
                     <span class="text-secondary small">
                       <i class="meter-check1-color bi bi-patch-check-fill"></i> <span class="meter-check1-color meter-check1">{{ .check1 }}</span>
+                      <a class="edit-btn link-secondary" href="#"><i class="bi bi-pencil"></i></a>
                     </span>
+                    <form class="meter-check1-edit row g-1 align-items-center" style="display:none;">
+                      <div class="col-10">
+                        <div class="input-group">
+                          <div class="input-group-text"><i class="bi bi-patch-check-fill"></i></div>
+                          <input type="date" class="form-control" class="meter-check1-edit-check0" name="data" placeholder="" autocomplete="off" />
+                        </div>
+                      </div>
+                      <div class="col-2">
+                        <button type="submit" class="btn btn-primary">OK</button>
+                      </div>
+                    <input type="hidden" name="field" value="check1">
+                    </form>
                   </div>
                   <div class="col">
                     <span class="text-muted small"><i class="bi bi-hash"></i> <span class="meter-serial0">{{ .serial0 }}</span></span>
@@ -294,6 +333,36 @@
                     console.log(data.msg);
                 break;
                 }
+            },
+            edit: function () {
+                $(this).parent().hide();
+                $(this).parent().parent().children('form').show();
+            },
+            set: function (e) {
+                e.preventDefault();
+                var val = $('input', this).val()
+                if ($('input', this).val()) {
+                    if ($('input', this).attr('type') == "date") {
+                        var type = "date";
+                        var pubDate = new Date(val);
+                        val = pubDate.toLocaleDateString();
+                    } else {
+                        var type = "text"
+                    }
+                    $(this).prev().children('span').html(val);
+                    $.ajax({
+                        url: "./",
+                        async: true,
+                        data: $(this).serializeArray().concat(
+                            {name: "type", value: type},
+                            {name: "action", value: "set"},
+                            {name: "key", value: $(this).closest('.meter-container')[0].id}
+                        ),
+                        success: null
+                    });
+                }
+                $(this).hide();
+                $(this).prev().show();
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log("Update error!");
