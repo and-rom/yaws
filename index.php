@@ -13,59 +13,64 @@
     ini_set("serialize_precision", -1);
     date_default_timezone_set('Europe/Moscow');
 
-    if ($json = file_get_contents("php://input")) {
-        if ($obj = json_decode($json, true)) {
-            if(!file_exists("waterius.db")) {
-                $db=new SQLite3("waterius.db");
-                $sql="CREATE TABLE data (
-                    id INTEGER PRIMARY KEY,
-                    imp0 INTEGER,
-                    imp1 INTEGER,
-                    delta0 INTEGER,
-                    delta1 INTEGER,
-                    ch0 REAL,
-                    ch1 REAL,
-                    adc0 INTEGER,
-                    adc1 INTEGER,
-                    good INTEGER,
-                    boot INTEGER,
-                    version INTEGER,
-                    version_esp TEXT,
-                    key TEXT,
-                    resets INTEGER,
-                    email TEXT,
-                    voltage REAL,
-                    voltage_diff REAL,
-                    voltage_low INTEGER,
-                    f0 INTEGER,
-                    f1 INTEGER,
-                    rssi TEXT,
-                    waketime INTEGER,
-                    setuptime INTEGER,
-                    period_min INTEGER,
-                    serial0 TEXT,
-                    serial1 TEXT,
-                    model INTEGER,
-                    datetime INTEGER)";
+    if ($_SERVER['REQUEST_METHOD'] != 'POST' && !filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+        if ($json = file_get_contents("php://input")) {
+            if ($obj = json_decode($json, true)) {
+                if(!file_exists("waterius.db")) {
+                    $db=new SQLite3("waterius.db");
+                    $sql="CREATE TABLE data (
+                        id INTEGER PRIMARY KEY,
+                        imp0 INTEGER,
+                        imp1 INTEGER,
+                        delta0 INTEGER,
+                        delta1 INTEGER,
+                        ch0 REAL,
+                        ch1 REAL,
+                        adc0 INTEGER,
+                        adc1 INTEGER,
+                        good INTEGER,
+                        boot INTEGER,
+                        version INTEGER,
+                        version_esp TEXT,
+                        key TEXT,
+                        resets INTEGER,
+                        email TEXT,
+                        voltage REAL,
+                        voltage_diff REAL,
+                        voltage_low INTEGER,
+                        f0 INTEGER,
+                        f1 INTEGER,
+                        rssi TEXT,
+                        waketime INTEGER,
+                        setuptime INTEGER,
+                        period_min INTEGER,
+                        serial0 TEXT,
+                        serial1 TEXT,
+                        model INTEGER,
+                        datetime INTEGER)";
+                    $db->query($sql);
+                    $sql="CREATE TABLE meters (
+                        id INTEGER PRIMARY KEY,
+                        key TEXT,
+                        name TEXT,
+                        check0 INTEGER,
+                        check1 INTEGER,
+                        UNIQUE(key))";
+                    $db->query($sql);
+                } else {
+                   $db = new SQLite3('waterius.db');
+                }
+
+                $sql="INSERT OR IGNORE INTO meters (key) VALUES('".$obj['key']."')";
                 $db->query($sql);
-                $sql="CREATE TABLE meters (
-                    id INTEGER PRIMARY KEY,
-                    key TEXT,
-                    name TEXT,
-                    check0 INTEGER,
-                    check1 INTEGER,
-                    UNIQUE(key))";
+
+                $sql = "INSERT INTO data (".implode(",", array_keys($obj)).", datetime) VALUES ('".implode("','",array_values($obj))."', strftime('%s','now'))";
                 $db->query($sql);
-            } else {
-               $db = new SQLite3('waterius.db');
             }
-
-            $sql="INSERT OR IGNORE INTO meters (key) VALUES('".$obj['key']."')";
-            $db->query($sql);
-
-            $sql = "INSERT INTO data (".implode(",", array_keys($obj)).", datetime) VALUES ('".implode("','",array_values($obj))."', strftime('%s','now'))";
-            $db->query($sql);
+            exit;
         }
+    } else {
+        header('HTTP/1.1 406 Not Acceptable');
         exit;
     }
 
