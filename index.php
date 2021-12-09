@@ -193,9 +193,11 @@
                   <div class="row row-cols-2">
                     <div class="col">
                       <span class="text-danger fs-4 fw-bold"><i class="bi bi-droplet-fill"></i> <span class="meter-ch0">{{ .ch0 }}</span> м<sup>3</sup></span>
+                      <a class="chart-btn link-secondary" href="#"><i class="bi bi-graph-up"></i></a>
                     </div>
                     <div class="col">
                       <span class="text-primary fs-4 fw-bold"><i class="bi bi-droplet-fill"></i> <span class="meter-ch1">{{ .ch1 }}</span> м<sup>3</sup></span>
+                      <a class="chart-btn link-secondary" href="#"><i class="bi bi-graph-up"></i></a>
                     </div>
                     <div class="col">
                       <span class="text-secondary"><i class="bi bi-plus"></i> <span class="meter-delta0">{{ .delta0 }}</span></span>
