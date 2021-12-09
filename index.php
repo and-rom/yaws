@@ -158,7 +158,7 @@
       <div class="container-fluid">
         <span class="navbar-brand mb-0 h1"><img src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/icons/speedometer.svg" alt="" width="30" height="24" class="d-inline-block align-text-top"> Waterius</span>
         <span class="navbar-text">
-          <a class="" href="https://github.com/dontsovcmc/"><i class="bi bi-github"></i> waterius</a>
+          <a class="" href="https://github.com/dontsovcmc/waterius/"><i class="bi bi-github"></i> waterius</a>
           <a class="" href="https://github.com/and-rom/yaws/"><i class="bi bi-github"></i> yaws</a>
         </span>
       </div>
