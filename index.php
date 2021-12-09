@@ -13,7 +13,7 @@
     ini_set("serialize_precision", -1);
     date_default_timezone_set('Europe/Moscow');
 
-    if ($_SERVER['REQUEST_METHOD'] != 'POST' && !filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && !filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
         if ($json = file_get_contents("php://input")) {
             if ($obj = json_decode($json, true)) {
                 if(!file_exists("waterius.db")) {
@@ -69,7 +69,7 @@
             }
             exit;
         }
-    } else {
+    } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header('HTTP/1.1 406 Not Acceptable');
         exit;
     }
