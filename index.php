@@ -208,18 +208,19 @@
                   </div>
                 <input type="hidden" name="field" value="name">
                 </form>
-                <div class="text-muted small"><span class="meter-date">{{ date('d.m.Y H:i:s', .datetime) }}</span></div>
+                <div class="text-muted small">
+                  <span class="meter-date">{{ date('d.m.Y H:i:s', .datetime) }}</span>
+                  <a class="chart-btn link-secondary" href="#" data-bs-toggle="modal" data-bs-target="#chart-modal" data-bs-meter-key="{{ .key }}"><i class="bi bi-graph-up"></i></a>
+                </div>
               </div>
               <div class="card-body">
                 <div class="card-title border-bottom">
                   <div class="row row-cols-2">
                     <div class="col">
                       <span class="text-danger fs-4 fw-bold"><i class="bi bi-droplet-fill"></i> <span class="meter-ch0">{{ .ch0 }}</span> м<sup>3</sup></span>
-                      <a class="chart-btn link-secondary" href="#"><i class="bi bi-graph-up"></i></a>
                     </div>
                     <div class="col">
                       <span class="text-primary fs-4 fw-bold"><i class="bi bi-droplet-fill"></i> <span class="meter-ch1">{{ .ch1 }}</span> м<sup>3</sup></span>
-                      <a class="chart-btn link-secondary" href="#"><i class="bi bi-graph-up"></i></a>
                     </div>
                     <div class="col">
                       <span class="text-secondary"><i class="bi bi-plus"></i> <span class="meter-delta0">{{ .delta0 }}</span></span>
@@ -330,6 +331,7 @@
                             $(meterContainer).attr('style', meter.key);
                             $(".meter-name", meterContainer).html(meter.name != "" ? meter.name : meter.key);
                             $(".meter-date", meterContainer).html(this.dateTime(meter.datetime));
+                            $(".chart-btn", meterContainer).data("bs-meter-key", meter.key);
                             $(".meter-ch0", meterContainer).html(meter.ch0);
                             $(".meter-ch1", meterContainer).html(meter.ch1);
                             $(".meter-delta0", meterContainer).html(meter.delta0/1000);
