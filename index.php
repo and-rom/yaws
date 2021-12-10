@@ -296,6 +296,19 @@
           </div>
         </div>
       </div>
+
+      <div class="modal fade" id="chart-modal" tabindex="-1" aria-labelledby="chart-modal" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="chart-modal-title"></h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div id="chart" class="modal-body"></div>
+          </div>
+        </div>
+      </div>
+
     </main>
 
     <footer class="footer mt-auto py-3 bg-light">
@@ -356,6 +369,7 @@
                         $(".edit-btn").on('click', this.edit.bind(this));
                         $("form").submit(this.set.bind(this));
                     }
+                    $("#chart-modal").on("show.bs.modal", this.chartModal.bind(this))
                     break;
                 default:
                     console.log(data.msg);
@@ -391,6 +405,10 @@
                 }
                 $(e.currentTarget).hide();
                 $(e.currentTarget).prev().show();
+            },
+            chartModal: function (e) {
+                if ($("#chart-modal-title").html() != "") return;
+                $("#chart-modal-title").html($(e.relatedTarget).parents(".card-header").children(".meter-name-container").children(".meter-name").html());
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log("Update error!");
