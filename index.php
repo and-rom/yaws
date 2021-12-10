@@ -336,9 +336,9 @@
                             $(".meter-ch1", meterContainer).html(meter.ch1);
                             $(".meter-delta0", meterContainer).html(meter.delta0/1000);
                             $(".meter-delta1", meterContainer).html(meter.delta1/1000);
-                            $(".meter-check0", meterContainer).html(meter.check0 != "" ? this.dateTime(meter.check0, true) : "");
+                            $(".meter-check0", meterContainer).html(meter.check0 != "" ? this.dateTime(meter.check0, {day: "2-digit", month: "2-digit", year: "numeric"}) : "");
                             $(".meter-check0-color", meterContainer).addClass(meter.check0 && meter.check0*1000 <= +new Date() ? 'text-danger' : meter.check0 && (meter.check0*1000 - +new Date())/86400000 < 180 ? 'text-warning' : '');
-                            $(".meter-check1", meterContainer).html(meter.check1 != "" ? this.dateTime(meter.check1, true) : "");
+                            $(".meter-check1", meterContainer).html(meter.check1 != "" ? this.dateTime(meter.check1, {day: "2-digit", month: "2-digit", year: "numeric"}) : "");
                             $(".meter-check1-color", meterContainer).addClass(meter.check1 && meter.check1*1000 <= +new Date() ? 'text-danger' : meter.check1 && (meter.check1*1000 - +new Date())/86400000 < 180 ? 'text-warning' : '');
                             $(".meter-serial0", meterContainer).html(meter.serial0);
                             $(".meter-serial1", meterContainer).html(meter.serial1);
@@ -395,10 +395,10 @@
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log("Update error!");
             },
-            dateTime: function (timestamp, dateOnly = false) {
+            dateTime: function (timestamp, options = {}) {
                 var pubDate = new Date(timestamp * 1000);
 
-                return pubDate.toLocaleDateString() + (dateOnly ? "" : " " + pubDate.toLocaleTimeString());
+                return pubDate.toLocaleString(navigator.languages != undefined ? navigator.languages[0] : navigator.language, options);
             }
         }
 
