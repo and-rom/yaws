@@ -353,8 +353,8 @@
                             $(".meter-version_esp", meterContainer).html(meter.version_esp);
                             $(meterContainer).appendTo("#main-container")
                         });
-                        $(".edit-btn").on('click', this.edit);
-                        $("form").submit(this.set);
+                        $(".edit-btn").on('click', this.edit.bind(this));
+                        $("form").submit(this.set.bind(this));
                     }
                     break;
                 default:
@@ -362,35 +362,35 @@
                 break;
                 }
             },
-            edit: function () {
-                $(this).parent().hide();
-                $(this).parent().parent().children('form').show();
+            edit: function (e) {
+                $(e.currentTarget).parent().hide();
+                $(e.currentTarget).parent().parent().children('form').show();
             },
             set: function (e) {
                 e.preventDefault();
-                var val = $('input', this).val()
-                if ($('input', this).val()) {
-                    if ($('input', this).attr('type') == "date") {
+                var val = $('input', e.currentTarget).val()
+                if ($('input', e.currentTarget).val()) {
+                    if ($('input', e.currentTarget).attr('type') == "date") {
                         var type = "date";
                         var pubDate = new Date(val);
                         val = pubDate.toLocaleDateString();
                     } else {
                         var type = "text"
                     }
-                    $(this).prev().children('span').html(val);
+                    $(e.currentTarget).prev().children('span').html(val);
                     $.ajax({
                         url: "./",
                         async: true,
-                        data: $(this).serializeArray().concat(
+                        data: $(e.currentTarget).serializeArray().concat(
                             {name: "type", value: type},
                             {name: "action", value: "set"},
-                            {name: "key", value: $(this).closest('.meter-container')[0].id}
+                            {name: "key", value: $(e.currentTarget).closest('.meter-container')[0].id}
                         ),
                         success: null
                     });
                 }
-                $(this).hide();
-                $(this).prev().show();
+                $(e.currentTarget).hide();
+                $(e.currentTarget).prev().show();
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log("Update error!");
