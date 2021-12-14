@@ -1,4 +1,6 @@
 <?php
+    define("WATERIUS_RU", false);
+
     if (php_sapi_name() == "cli") {
         $stdin = fopen('php://stdin', 'r');
         echo "Login: ";
@@ -66,6 +68,22 @@
 
                 $sql = "INSERT INTO data (".implode(",", array_keys($obj)).", datetime) VALUES ('".implode("','",array_values($obj))."', strftime('%s','now'))";
                 $db->query($sql);
+
+                if (WATERIUS_RU && file_exists("waterius.ru.cer"))
+                file_get_contents("https://cloud.waterius.ru/", false, stream_context_create(array(
+                    "ssl" => [
+                        "cafile" => "waterius.ru.cer",
+                        "verify_peer"=> true,
+                        "verify_peer_name"=> true
+                    ],
+                    "http" => array(
+                        "method"  => "POST",
+                        "content" => $json,
+                        "header"=>  "Content-Type: application/json\r\n" .
+                                    "Accept: application/json\r\n",
+                        "ignore_errors" => true
+                ))));
+
             }
             exit;
         }
