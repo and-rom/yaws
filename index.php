@@ -403,6 +403,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
     <script type="text/javascript">
         var app = {
+            chartType: "delta",
+            chartPeriod: "week",
+            chartPeriodShift: 0,
+            chartKey: null,
             update: function () {
                 $.ajax({
                     dataType: "json",
@@ -452,6 +456,16 @@
                         $("form").submit(this.set.bind(this));
                     }
                     $("#chart-modal").on("show.bs.modal", this.chartModal.bind(this));
+
+                    $("#chart-" + this.chartType).prop("checked", true)
+                    $("input:radio[name=chart-type]").on("change", this.chartTypeSet.bind(this));
+
+                    $("#chart-" + this.chartPeriod).prop("checked", true)
+                    $("input:radio[name=chart-period]").on("change", this.chartPeriodSet.bind(this));
+
+                    $("#chart-free-submit").on("click", this.chartPeriodSet.bind(this));
+
+                    $("#chart-shift-prev, #chart-shift-next").on("click", this.chartPeriodShiftSet.bind(this));
                     break;
                 default:
                     console.log(data.msg);
@@ -489,8 +503,40 @@
                 $(e.currentTarget).prev().show();
             },
             chartModal: function (e) {
-                if ($("#chart-modal-title").html() != "") return;
+                if (!this.chartData) this.chartDataGet();
+                if ($("#chart-modal-title").html() == this.chartKey) return;
+                this.chartKey = $(e.relatedTarget).data("bs-meter-key");
                 $("#chart-modal-title").html($(e.relatedTarget).parents(".card-header").children(".meter-name-container").children(".meter-name").html());
+            },
+            chartDataGet: function (period) {
+                $.ajax({
+                    url: "./",
+                    async: true,
+                    data: {
+                        action: "chart",
+                        key: this.key
+                    },
+                    success: (data) => {
+                        this.chartData = data.chartData;
+                    }
+                });
+            },
+            chartTypeSet: function (e) {
+                this.chartType = e.currentTarget.id.split("-")[1];
+                this.chartDraw();
+            },
+            chartPeriodSet: function (e) {
+                if (e.currentTarget.type == "radio") {
+                    $("#chart-free-container").toggle(e.currentTarget.id == "chart-free");
+                    $("#chart-shift").toggle(e.currentTarget.id != "chart-free");
+                    if (e.currentTarget.id != "chart-free") {
+                      this.chartPeriod = e.currentTarget.id.split("-")[1];
+                      this.chartDraw();
+                    }
+                }
+            },
+            chartPeriodShiftSet: function (e) {
+                this.chartDraw();
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log("Update error!");
