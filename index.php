@@ -401,6 +401,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.32.0/dist/apexcharts.min.js" integrity="sha256-8RsHiqb6y4XCzqyzcONwW3ePj0CGKbu8bqS/bzQPAfg=" crossorigin="anonymous"></script>
     <script type="text/javascript">
         var app = {
             chartType: "delta",
@@ -507,6 +508,9 @@
                 if ($("#chart-modal-title").html() == this.chartKey) return;
                 this.chartKey = $(e.relatedTarget).data("bs-meter-key");
                 $("#chart-modal-title").html($(e.relatedTarget).parents(".card-header").children(".meter-name-container").children(".meter-name").html());
+                setTimeout(() => {
+                    this.chartDraw()
+                }, 500);
             },
             chartDataGet: function (period) {
                 $.ajax({
@@ -537,6 +541,142 @@
             },
             chartPeriodShiftSet: function (e) {
                 this.chartDraw();
+            },
+            chartDraw: function () {
+                var options = {
+                    series: [
+                        {
+                            name: "ГВС",
+                            data: this.chartData[this.chartKey].map(el => this.chartType == "delta" ? el.delta0 : el.ch0)
+                        },
+                        {
+                            name: "ХВС",
+                            data: this.chartData[this.chartKey].map(el => this.chartType == "delta" ? el.delta1 : el.ch1)
+                        }
+                    ],
+                    xaxis: {
+                        categories: this.chartData[this.chartKey].map(el => el.datetime*1000),
+                        type: "datetime",
+                        labels: {
+                            datetimeUTC: false
+                        },
+                        crosshairs: {
+                            show: this.chartType == "delta" ? false : true,
+                            width: 1,
+                            position: "back",
+                            opacity: 0.9,
+                            stroke: {
+                                color: "#b6b6b6",
+                                width: 1,
+                                dashArray: 3
+                            },
+                            fill: {
+                                type: "solid",
+                                color: "#B1B9C4",
+                                gradient: {
+                                    colorFrom: "#D8E3F0",
+                                    colorTo: "#BED1E6",
+                                    stops: [
+                                        0,
+                                        100
+                                    ],
+                                    opacityFrom: 0.4,
+                                    opacityTo: 0.5
+                                }
+                            },
+                            dropShadow: {
+                                enabled: false,
+                                left: 0,
+                                top: 0,
+                                blur: 1,
+                                opacity: 0.4
+                            }
+                        },
+                        tooltip: {
+                            enabled: true
+                        }
+                    },
+                    colors: ["#dc3545", "#0d6efd"],
+                    fill: {
+                      type: this.chartType == "delta" ? "solid" : "gradient",
+                      colors: ["#dc3545", "#0d6efd"],
+                      gradient: {
+                          type: "vertical",
+                          shadeIntensity: 1,
+                          gradientToColors: ["#dc3545", "#0d6efd"],
+                          inverseColors: false,
+                          opacityFrom: 0.8,
+                          opacityTo: 0,
+                          stops: [0]
+                      }
+                    },
+                    stroke: {
+                        show: this.chartType == "delta" ? false : true,
+                        lineCap: 'butt',
+                        width: this.chartType == "delta" ? 1 : 3
+                    },
+                    chart: {
+                        locales: [{
+                            "name": "ru",
+                            "options": {
+                              "months": ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"],
+                              "shortMonths": ["Янв","Фев","Мар","Апр","Май","Июн","Июл","Авг","Сен","Окт","Ноя","Дек"],
+                              "days": ["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"],
+                              "shortDays": ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
+                              "toolbar": {"exportToSVG": "Сохранить SVG","exportToPNG": "Сохранить PNG","exportToCSV": "Сохранить CSV","menu": "Меню","selection": "Выбор","selectionZoom": "Выбор с увеличением","zoomIn": "Увеличить","zoomOut": "Уменьшить","pan": "Перемещение","reset": "Сбросить увеличение"}
+                            }
+                          }],
+                        defaultLocale: "ru",
+                        type: this.chartType == "delta" ? "bar" : "area",
+                        zoom: {
+                          autoScaleYaxis: true
+                        },
+                        toolbar: {
+                            show: true
+                        },
+                        animations: {
+                            enabled: true,
+                            easing: 'swing',
+                            speed: 800,
+                            animateGradually: {
+                                enabled: true,
+                                delay: 150
+                            }
+                        }
+                    },
+                    dataLabels: {
+                        enabled: false
+                    },
+                    markers: {
+                        hover: {
+                          sizeOffset: 6
+                        }
+                    },
+                    tooltip: {
+                        enabled: true,
+                        shared: this.chartType == "delta" ? false : true,
+                        followCursor: true,
+                        intersect: this.chartType == "delta" ? true : false,
+                        x: {
+                            show: true,
+                            format: "dd MMM yyyy"
+                        },
+                        marker: {
+                            show: true
+                        }
+                    },
+                    legend: {
+                        show: false
+                    }
+                };
+
+                if (!this.chart) {
+                    this.chart = new ApexCharts($("#chart")[0], options);
+                    this.chart.render();
+                } else {
+                    this.chart.updateOptions(options, true);
+                }
+
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log("Update error!");
