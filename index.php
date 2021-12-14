@@ -333,7 +333,60 @@
               <h5 class="modal-title" id="chart-modal-title"></h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div id="chart" class="modal-body"></div>
+            <div class="modal-body container">
+              <div class="row mb-2">
+                <div class="col">
+                  <input type="radio" class="btn-check" name="chart-type" id="chart-delta" autocomplete="off" />
+                  <label class="btn btn-outline-primary btn-sm w-100" for="chart-delta">Ежедневный раход</label>
+                </div>
+                <div class="col">
+                  <input type="radio" class="btn-check" name="chart-type" id="chart-total" autocomplete="off" />
+                  <label class="btn btn-outline-primary btn-sm w-100" for="chart-total">Общий расход</label>
+                </div>
+              </div>
+              <div class="row row-cols-1 mb-2">
+                <div class="col">
+                  <div class="btn-group w-100" role="group">
+                    <input type="radio" class="btn-check" name="chart-period" id="chart-month" autocomplete="off" />
+                    <label class="btn btn-outline-primary btn-sm" for="chart-month">30 дней</label>
+                    <input type="radio" class="btn-check" name="chart-period" id="chart-week" autocomplete="off" />
+                    <label class="btn btn-outline-primary btn-sm" for="chart-week">7 дней</label>
+                    <input type="radio" class="btn-check" name="chart-period" id="chart-free" autocomplete="off" />
+                    <label class="btn btn-outline-primary btn-sm" for="chart-free">Период</label>
+                  </div>
+                </div>
+              </div>
+              <div id="chart-free-container" class="row align-items-center mb-2" style="display:none">
+                <div class="col-5">
+                  <input class="form-control form-control-sm" type="datetime-local">
+                </div>
+                <div class="col-5">
+                  <input class="form-control form-control-sm" type="datetime-local">
+                </div>
+                <div class="col-2">
+                  <button id="chart-free-submit" type="submit" class="btn btn-primary btn-sm w-100">OK</button>
+                </div>
+              </div>
+              <div id="chart-shift" class="row justify-content-center">
+                <div class="col-1">
+                  <ul class="pagination pagination-sm mb-0">
+                    <li class="page-item">
+                      <a id="chart-shift-prev" class="page-link" href="#">
+                        <span>&laquo;</span>
+                      </a>
+                    </li>
+                    <li class="page-item">
+                      <a id="chart-shift-next" class="page-link" href="#">
+                        <span>&raquo;</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="row">
+                <div id="chart" class="col"></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
