@@ -17,4 +17,4 @@
     ```
     # php ./index.php
     ```
-  
+4. Для дублирования данных в Личный кабинет на сайте waterius.ru установить константу `WATERIUS_RU` в `true` и положить в директорию [сертификат УЦ waterius.ru](https://github.com/dontsovcmc/waterius/blob/7b233852652dc2ae4530cdb70d8802027b2f3791/ESP8266/src/cert.h)
