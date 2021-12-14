@@ -2,20 +2,20 @@
     define("WATERIUS_RU", false);
 
     if (php_sapi_name() == "cli") {
-        $stdin = fopen('php://stdin', 'r');
+        $stdin = fopen("php://stdin", "r");
         echo "Login: ";
         $login = rtrim(fgets($stdin));
         echo "Password: ";
         $password = password_hash(rtrim(fgets($stdin)), PASSWORD_DEFAULT);
-        file_put_contents('./.htpassword', $login.":".$password);
+        file_put_contents("./.htpassword", $login.":".$password);
         exit;
     }
 
     ini_set("precision", 14);
     ini_set("serialize_precision", -1);
-    date_default_timezone_set('Europe/Moscow');
+    date_default_timezone_set("Europe/Moscow");
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST' && !filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && !filter_var($_SERVER["REMOTE_ADDR"], FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
         if ($json = file_get_contents("php://input")) {
             if ($obj = json_decode($json, true)) {
                 if(!file_exists("waterius.db")) {
@@ -60,10 +60,10 @@
                         UNIQUE(key))";
                     $db->query($sql);
                 } else {
-                   $db = new SQLite3('waterius.db');
+                   $db = new SQLite3("waterius.db");
                 }
 
-                $sql="INSERT OR IGNORE INTO meters (key) VALUES('".$obj['key']."')";
+                $sql="INSERT OR IGNORE INTO meters (key) VALUES('".$obj["key"]."')";
                 $db->query($sql);
 
                 $sql = "INSERT INTO data (".implode(",", array_keys($obj)).", datetime) VALUES ('".implode("','",array_values($obj))."', strftime('%s','now'))";
@@ -87,18 +87,18 @@
             }
             exit;
         }
-    } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    } elseif ($_SERVER["REQUEST_METHOD"] == "POST") {
         header('HTTP/1.1 406 Not Acceptable');
         exit;
     }
 
-    list($login, $password) = explode(":", file_get_contents('./.htpassword'), 2);
-    if (isset($_SERVER['PHP_AUTH_USER']) && password_verify($_SERVER['PHP_AUTH_PW'], $password) && $_SERVER['PHP_AUTH_USER']==$login) {
+    list($login, $password) = explode(":", file_get_contents("./.htpassword"), 2);
+    if (isset($_SERVER["PHP_AUTH_USER"]) && password_verify($_SERVER["PHP_AUTH_PW"], $password) && $_SERVER["PHP_AUTH_USER"]==$login) {
         if (isset($_GET) && count($_GET)) {
 
             $response = new stdClass;
 
-            $action = (isset($_GET['action']) ? $_GET['action'] : "");
+            $action = (isset($_GET["action"]) ? $_GET["action"] : "");
 
             switch ($action) {
                 case "data":
@@ -123,13 +123,13 @@
                                     version_esp,
                                     datetime
                                 FROM data
-                                WHERE key = '".$meter['key']."'
+                                WHERE key = '".$meter["key"]."'
                                 ORDER BY id DESC LIMIT 1";
                             $data = $db->query($sql);
                             $data = $data->fetchArray(SQLITE3_ASSOC);
-                            $data['name'] = $meter['name'] ? $meter['name'] : "";
-                            $data['check0'] = $meter['check0'] ? $meter['check0'] : "";
-                            $data['check1'] = $meter['check1'] ? $meter['check1'] : "";
+                            $data["name"] = $meter["name"] ? $meter["name"] : "";
+                            $data["check0"] = $meter["check0"] ? $meter["check0"] : "";
+                            $data["check1"] = $meter["check1"] ? $meter["check1"] : "";
                             $response->meters[] = $data;
                         }
                     } else {
@@ -153,9 +153,9 @@
                     $response->code = 200;
                     break;
                 case "set":
-                    $data = $_GET['type'] == "date" ? strtotime($_GET['data']) : $_GET['data'];
+                    $data = $_GET["type"] == "date" ? strtotime($_GET["data"]) : $_GET["data"];
                     $db=new SQLite3("waterius.db");
-                    $sql = "UPDATE meters SET ".$_GET['field']." = '".$data."' WHERE key = '".$_GET['key']."'";
+                    $sql = "UPDATE meters SET ".$_GET["field"]." = '".$data."' WHERE key = '".$_GET["key"]."'";
                     $db->query($sql);
                     $response->code = 200;
                     break;
@@ -214,7 +214,7 @@
                   <i class="bi bi-cpu-fill"></i> <span class="meter-name">{{ .key || .name }}</span>
                   <a class="edit-btn link-secondary" href="#"><i class="bi bi-pencil"></i></a>
                 </div>
-                <form class="meter-name-edit row g-1 align-items-center" style="display:none;">
+                <form class="meter-name-edit row g-1 align-items-center" style="display:none">
                   <div class="col-10">
                     <div class="input-group">
                       <div class="input-group-text"><i class="bi bi-cpu-fill"></i></div>
@@ -251,7 +251,7 @@
                         <i class="meter-check0-color bi bi-patch-check-fill"></i> <span class="meter-check0-color meter-check0">{{ .check0 }}</span>
                         <a class="edit-btn link-secondary" href="#"><i class="bi bi-pencil"></i></a>
                       </span>
-                      <form class="meter-check0-edit row g-1 align-items-center" style="display:none;">
+                      <form class="meter-check0-edit row g-1 align-items-center" style="display:none">
                         <div class="col-10">
                           <div class="input-group">
                             <div class="input-group-text"><i class="bi bi-patch-check-fill"></i></div>
@@ -269,7 +269,7 @@
                         <i class="meter-check1-color bi bi-patch-check-fill"></i> <span class="meter-check1-color meter-check1">{{ .check1 }}</span>
                         <a class="edit-btn link-secondary" href="#"><i class="bi bi-pencil"></i></a>
                       </span>
-                      <form class="meter-check1-edit row g-1 align-items-center" style="display:none;">
+                      <form class="meter-check1-edit row g-1 align-items-center" style="display:none">
                         <div class="col-10">
                           <div class="input-group">
                             <div class="input-group-text"><i class="bi bi-patch-check-fill"></i></div>
@@ -315,12 +315,12 @@
         </div>
       </div>
 
-      <div class="modal fade" id="chart-modal" tabindex="-1" aria-labelledby="chart-modal" aria-hidden="true">
+      <div class="modal fade" id="chart-modal" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="chart-modal-title"></h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div id="chart" class="modal-body"></div>
           </div>
@@ -358,8 +358,8 @@
                     if (data.meters.length != 0) {
                         data.meters.forEach((meter) => {
                             var meterContainer = $("#meter-template").clone()
-                            $(meterContainer).attr('id', meter.key);
-                            $(meterContainer).attr('style', meter.key);
+                            $(meterContainer).attr("id", meter.key);
+                            $(meterContainer).show();
                             $(".meter-name", meterContainer).html(meter.name != "" ? meter.name : meter.key);
                             $(".meter-date", meterContainer).html(this.dateTime(meter.datetime));
                             $(".chart-btn", meterContainer).data("bs-meter-key", meter.key);
@@ -368,26 +368,26 @@
                             $(".meter-delta0", meterContainer).html(meter.delta0/1000);
                             $(".meter-delta1", meterContainer).html(meter.delta1/1000);
                             $(".meter-check0", meterContainer).html(meter.check0 != "" ? this.dateTime(meter.check0, {day: "2-digit", month: "2-digit", year: "numeric"}) : "");
-                            $(".meter-check0-color", meterContainer).addClass(meter.check0 && meter.check0*1000 <= +new Date() ? 'text-danger' : meter.check0 && (meter.check0*1000 - +new Date())/86400000 < 180 ? 'text-warning' : '');
+                            $(".meter-check0-color", meterContainer).addClass(meter.check0 && meter.check0*1000 <= +new Date() ? "text-danger" : meter.check0 && (meter.check0*1000 - +new Date())/86400000 < 180 ? "text-warning" : "");
                             $(".meter-check1", meterContainer).html(meter.check1 != "" ? this.dateTime(meter.check1, {day: "2-digit", month: "2-digit", year: "numeric"}) : "");
-                            $(".meter-check1-color", meterContainer).addClass(meter.check1 && meter.check1*1000 <= +new Date() ? 'text-danger' : meter.check1 && (meter.check1*1000 - +new Date())/86400000 < 180 ? 'text-warning' : '');
+                            $(".meter-check1-color", meterContainer).addClass(meter.check1 && meter.check1*1000 <= +new Date() ? "text-danger" : meter.check1 && (meter.check1*1000 - +new Date())/86400000 < 180 ? "text-warning" : "");
                             $(".meter-serial0", meterContainer).html(meter.serial0);
                             $(".meter-serial1", meterContainer).html(meter.serial1);
                             $(".meter-voltage", meterContainer).html(meter.voltage);
-                            $(".meter-voltage-color", meterContainer).addClass(meter.voltage_low == "1" ? 'text-warning' : 'text-success');
-                            $(".meter-voltage-icon", meterContainer).addClass(meter.voltage_low == "1" ? 'bi-battery' : 'bi-battery-half');
+                            $(".meter-voltage-color", meterContainer).addClass(meter.voltage_low == "1" ? "text-warning" : "text-success");
+                            $(".meter-voltage-icon", meterContainer).addClass(meter.voltage_low == "1" ? "bi-battery" : "bi-battery-half");
                             $(".meter-voltage_diff", meterContainer).html(meter.voltage_diff);
                             $(".meter-rssi", meterContainer).html(meter.rssi);
-                            $(".meter-rssi-color", meterContainer).addClass(meter.rssi < -65 ? 'text-danger' : meter.rssi < -50 ? 'text-warning' : 'text-success');
-                            $(".meter-rssi-icon", meterContainer).addClass(meter.rssi < -65 ? 'bi-wifi-1' : meter.rssi < -50 ? 'bi-wifi-2' : 'bi-wifi');
+                            $(".meter-rssi-color", meterContainer).addClass(meter.rssi < -65 ? "text-danger" : meter.rssi < -50 ? "text-warning" : "text-success");
+                            $(".meter-rssi-icon", meterContainer).addClass(meter.rssi < -65 ? "bi-wifi-1" : meter.rssi < -50 ? "bi-wifi-2" : "bi-wifi");
                             $(".meter-version", meterContainer).html(meter.version);
                             $(".meter-version_esp", meterContainer).html(meter.version_esp);
                             $(meterContainer).appendTo("#main-container")
                         });
-                        $(".edit-btn").on('click', this.edit.bind(this));
+                        $(".edit-btn").on("click", this.edit.bind(this));
                         $("form").submit(this.set.bind(this));
                     }
-                    $("#chart-modal").on("show.bs.modal", this.chartModal.bind(this))
+                    $("#chart-modal").on("show.bs.modal", this.chartModal.bind(this));
                     break;
                 default:
                     console.log(data.msg);
@@ -396,27 +396,27 @@
             },
             edit: function (e) {
                 $(e.currentTarget).parent().hide();
-                $(e.currentTarget).parent().parent().children('form').show();
+                $(e.currentTarget).parent().parent().children("form").show();
             },
             set: function (e) {
                 e.preventDefault();
-                var val = $('input', e.currentTarget).val()
-                if ($('input', e.currentTarget).val()) {
-                    if ($('input', e.currentTarget).attr('type') == "date") {
+                var val = $("input", e.currentTarget).val()
+                if ($("input", e.currentTarget).val()) {
+                    if ($("input", e.currentTarget).attr("type") == "date") {
                         var type = "date";
                         var pubDate = new Date(val);
                         val = pubDate.toLocaleDateString();
                     } else {
                         var type = "text"
                     }
-                    $(e.currentTarget).prev().children('span').html(val);
+                    $(e.currentTarget).prev().children("span").html(val);
                     $.ajax({
                         url: "./",
                         async: true,
                         data: $(e.currentTarget).serializeArray().concat(
                             {name: "type", value: type},
                             {name: "action", value: "set"},
-                            {name: "key", value: $(e.currentTarget).closest('.meter-container')[0].id}
+                            {name: "key", value: $(e.currentTarget).closest(".meter-container")[0].id}
                         ),
                         success: null
                     });
