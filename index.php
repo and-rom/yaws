@@ -159,6 +159,17 @@
                     $db->query($sql);
                     $response->code = 200;
                     break;
+                case "chart":
+                    $db=new SQLite3("waterius.db");
+                    $sql = "SELECT key, delta0, delta1, ch0, ch1, datetime FROM data";
+                    $result = $db->query($sql);
+                    while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+                        $key=$row["key"];
+                        unset($row["key"]);
+                        $response->chartData[$key][] = $row;
+                    }
+                    $response->code = 200;
+                    break;
                 default:
                     $response->msg = "Method Not Allowed";
                     $response->code = 405;
