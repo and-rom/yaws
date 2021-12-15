@@ -347,24 +347,17 @@
               <div class="row row-cols-1 mb-2">
                 <div class="col">
                   <div class="btn-group w-100" role="group">
-                    <input type="radio" class="btn-check" name="chart-period" id="chart-month" autocomplete="off" />
-                    <label class="btn btn-outline-primary btn-sm" for="chart-month">30 дней</label>
-                    <input type="radio" class="btn-check" name="chart-period" id="chart-week" autocomplete="off" />
-                    <label class="btn btn-outline-primary btn-sm" for="chart-week">7 дней</label>
-                    <input type="radio" class="btn-check" name="chart-period" id="chart-free" autocomplete="off" />
-                    <label class="btn btn-outline-primary btn-sm" for="chart-free">Период</label>
+                    <input type="radio" class="btn-check" name="chart-period" id="chart-y" autocomplete="off" />
+                    <label class="btn btn-outline-primary btn-sm" for="chart-y">Год</label>
+                    <input type="radio" class="btn-check" name="chart-period" id="chart-hy" autocomplete="off" />
+                    <label class="btn btn-outline-primary btn-sm" for="chart-hy">Полгода</label>
+                    <input type="radio" class="btn-check" name="chart-period" id="chart-qtr" autocomplete="off" />
+                    <label class="btn btn-outline-primary btn-sm" for="chart-qtr">Квартал</label>
+                    <input type="radio" class="btn-check" name="chart-period" id="chart-mo" autocomplete="off" />
+                    <label class="btn btn-outline-primary btn-sm" for="chart-mo">Месяц</label>
+                    <input type="radio" class="btn-check" name="chart-period" id="chart-wk" autocomplete="off" />
+                    <label class="btn btn-outline-primary btn-sm" for="chart-wk">7 дней</label>
                   </div>
-                </div>
-              </div>
-              <div id="chart-free-container" class="row align-items-center mb-2" style="display:none">
-                <div class="col-5">
-                  <input class="form-control form-control-sm" type="datetime-local">
-                </div>
-                <div class="col-5">
-                  <input class="form-control form-control-sm" type="datetime-local">
-                </div>
-                <div class="col-2">
-                  <button id="chart-free-submit" type="submit" class="btn btn-primary btn-sm w-100">OK</button>
                 </div>
               </div>
               <div id="chart-shift" class="row justify-content-center">
@@ -405,7 +398,7 @@
     <script type="text/javascript">
         var app = {
             chartType: "delta",
-            chartPeriod: "week",
+            chartPeriod: "wk",
             chartPeriodShift: 0,
             chartKey: null,
             update: function () {
@@ -463,8 +456,6 @@
 
                     $("#chart-" + this.chartPeriod).prop("checked", true)
                     $("input:radio[name=chart-period]").on("change", this.chartPeriodSet.bind(this));
-
-                    $("#chart-free-submit").on("click", this.chartPeriodSet.bind(this));
 
                     $("#chart-shift-prev, #chart-shift-next").on("click", this.chartPeriodShiftSet.bind(this));
                     break;
@@ -530,14 +521,9 @@
                 this.chartDraw();
             },
             chartPeriodSet: function (e) {
-                if (e.currentTarget.type == "radio") {
-                    $("#chart-free-container").toggle(e.currentTarget.id == "chart-free");
-                    $("#chart-shift").toggle(e.currentTarget.id != "chart-free");
-                    if (e.currentTarget.id != "chart-free") {
-                      this.chartPeriod = e.currentTarget.id.split("-")[1];
-                      this.chartDraw();
-                    }
-                }
+                this.chartPeriodShift = 0;
+                this.chartPeriod = e.currentTarget.id.split("-")[1];
+                this.chartDraw();
             },
             chartPeriodShiftSet: function (e) {
                 this.chartDraw();
