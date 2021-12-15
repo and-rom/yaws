@@ -360,20 +360,12 @@
                   </div>
                 </div>
               </div>
-              <div id="chart-shift" class="row justify-content-center">
-                <div class="col-1">
-                  <ul class="pagination pagination-sm mb-0">
-                    <li class="page-item">
-                      <a id="chart-shift-prev" class="page-link" href="#">
-                        <span>&laquo;</span>
-                      </a>
-                    </li>
-                    <li class="page-item">
-                      <a id="chart-shift-next" class="page-link" href="#">
-                        <span>&raquo;</span>
-                      </a>
-                    </li>
-                  </ul>
+              <div id="chart-shift" class="row">
+                <div class="col">
+                  <div class="btn-group btn-group-sm w-100" role="group">
+                    <button id="chart-shift-prev" type="button" class="btn btn-outline-primary"><span>&laquo;</span></button>
+                    <button id="chart-shift-next" type="button" class="btn btn-outline-primary"><span>&raquo;</span></button>
+                  </div>
                 </div>
               </div>
               <div class="row">
