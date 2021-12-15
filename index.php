@@ -664,6 +664,53 @@
                 }
 
             },
+            chartPeriodCalc: function () {
+                var start = new Date();
+                var end = new Date();
+
+                switch (this.chartPeriod) {
+                    case "wk":
+                        start.setDate(start.getDate() - (7*(this.chartPeriodShift+1)-1));
+                        end.setDate(end.getDate() - 7*this.chartPeriodShift);
+                        break;
+                    case "mo":
+                        start.setMonth(start.getMonth() - this.chartPeriodShift);
+                        start.setDate(1);
+                        end.setMonth(end.getMonth() - this.chartPeriodShift);
+                        if (this.chartPeriodShift != 0)
+                            end.setDate(new Date(end.getFullYear(),end.getMonth() + 1, 0).getDate());
+                        break;
+                    case "qtr":
+                        start.setMonth((start.getMonth() - start.getMonth() % 3) - 3*this.chartPeriodShift);
+                        start.setDate(1);
+                        if (this.chartPeriodShift != 0) {
+                            end.setMonth((end.getMonth() - end.getMonth() % 3 + 2) - 3*this.chartPeriodShift);
+                            end.setDate(new Date(end.getFullYear(),end.getMonth() + 1, 0).getDate());
+                        }
+                        break;
+                    case "hy":
+                        start.setMonth((start.getMonth() - start.getMonth() % 6) - 6*this.chartPeriodShift);
+                        start.setDate(1);
+                        if (this.chartPeriodShift != 0) {
+                            end.setMonth((end.getMonth() - end.getMonth() % 6 + 5) - 6*this.chartPeriodShift);
+                            end.setDate(new Date(end.getFullYear(),end.getMonth() + 1, 0).getDate());
+                        }
+                        break;
+                    case "y":
+                        start.setFullYear(start.getFullYear() - this.chartPeriodShift, 0, 1);
+                        if (this.chartPeriodShift != 0) {
+                            end.setFullYear(end.getFullYear() - this.chartPeriodShift, 11, 31);
+                        }
+                        break;
+                }
+
+
+                start.setHours(0,0,0,0);
+                if (this.chartPeriodShift != 0)
+                    end.setHours(23,59,59,999);
+
+                return {start: start.getTime(), end: end.getTime()};
+            },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log("Update error!");
             },
