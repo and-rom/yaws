@@ -518,6 +518,14 @@
                 this.chartDraw();
             },
             chartPeriodShiftSet: function (e) {
+                switch (e.currentTarget.id) {
+                    case "chart-shift-prev":
+                        this.chartPeriodShift++;
+                        break;
+                    case "chart-shift-next":
+                        if (this.chartPeriodShift !=0) this.chartPeriodShift--;
+                        break;
+                }
                 this.chartDraw();
             },
             chartDraw: function () {
