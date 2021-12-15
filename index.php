@@ -529,22 +529,26 @@
                 this.chartDraw();
             },
             chartDraw: function () {
+                var chartPeriod = this.chartPeriodCalc();
+                var chartData = this.chartData[this.chartKey].filter(el => el.datetime*1000 >= chartPeriod.start && el.datetime*1000 <= chartPeriod.end);
+                if (!chartData.length) return;
+
                 var options = {
                     series: [
                         {
                             name: "ГВС",
-                            data: this.chartData[this.chartKey].map(el => this.chartType == "delta" ? el.delta0 : el.ch0)
+                            data: chartData.map(el => this.chartType == "delta" ? el.delta0 : el.ch0)
                         },
                         {
                             name: "ХВС",
-                            data: this.chartData[this.chartKey].map(el => this.chartType == "delta" ? el.delta1 : el.ch1)
+                            data: chartData.map(el => this.chartType == "delta" ? el.delta1 : el.ch1)
                         }
                     ],
                     xaxis: {
-                        categories: this.chartData[this.chartKey].map(el => el.datetime*1000),
-                        type: "datetime",
+                        type: this.chartType == "delta" ? "category" : "numeric",
+                        categories: chartData.map(el => el.datetime*1000),
                         labels: {
-                            datetimeUTC: false
+                            formatter: (value) => this.dateTime(value, new Date().getFullYear() == new Date(chartPeriod.start).getFullYear() ? {day: "2-digit", month: "2-digit"} : {day: "2-digit", month: "2-digit", year: "2-digit"})
                         },
                         crosshairs: {
                             show: this.chartType == "delta" ? false : true,
@@ -614,9 +618,6 @@
                           }],
                         defaultLocale: "ru",
                         type: this.chartType == "delta" ? "bar" : "area",
-                        zoom: {
-                          autoScaleYaxis: true
-                        },
                         toolbar: {
                             show: true
                         },
@@ -644,8 +645,7 @@
                         followCursor: true,
                         intersect: this.chartType == "delta" ? true : false,
                         x: {
-                            show: true,
-                            format: "dd MMM yyyy"
+                            show: true
                         },
                         marker: {
                             show: true
