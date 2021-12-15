@@ -492,7 +492,7 @@
                 this.chartKey = $(e.relatedTarget).data("bs-meter-key");
                 $("#chart-modal-title").html($(e.relatedTarget).parents(".card-header").children(".meter-name-container").children(".meter-name").html());
                 setTimeout(() => {
-                    this.chartDraw()
+                    this.chartDraw();
                 }, 500);
             },
             chartDataGet: function (period) {
