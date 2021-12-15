@@ -547,6 +547,8 @@
                     xaxis: {
                         type: this.chartType == "delta" ? "category" : "numeric",
                         categories: chartData.map(el => el.datetime*1000),
+                        tickAmount: ["y", "hy", "qtr"].includes(this.chartPeriod) ? 6 : "dataPoints",
+                        tickPlacement: this.chartType == "delta" ? "between" : "on",
                         labels: {
                             formatter: (value) => this.dateTime(value, new Date().getFullYear() == new Date(chartPeriod.start).getFullYear() ? {day: "2-digit", month: "2-digit"} : {day: "2-digit", month: "2-digit", year: "2-digit"})
                         },
@@ -564,6 +566,7 @@
                                 type: "solid",
                                 color: "#B1B9C4",
                                 gradient: {
+                                    shade: "light",
                                     colorFrom: "#D8E3F0",
                                     colorTo: "#BED1E6",
                                     stops: [
@@ -588,8 +591,9 @@
                     },
                     colors: ["#dc3545", "#0d6efd"],
                     fill: {
-                      type: this.chartType == "delta" ? "solid" : "gradient",
                       colors: ["#dc3545", "#0d6efd"],
+                      opacity: 0.8,
+                      type: this.chartType == "delta" ? "solid" : "gradient",
                       gradient: {
                           type: "vertical",
                           shadeIntensity: 1,
@@ -619,7 +623,7 @@
                         defaultLocale: "ru",
                         type: this.chartType == "delta" ? "bar" : "area",
                         toolbar: {
-                            show: true
+                            show: false
                         },
                         animations: {
                             enabled: true,
