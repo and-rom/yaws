@@ -417,8 +417,8 @@
                             $(".meter-name", meterContainer).html(meter.name != "" ? meter.name : meter.key);
                             $(".meter-date", meterContainer).html(this.dateTime(meter.datetime*1000));
                             $(".chart-btn", meterContainer).data("bs-meter-key", meter.key);
-                            $(".meter-ch0", meterContainer).html(meter.ch0);
-                            $(".meter-ch1", meterContainer).html(meter.ch1);
+                            $(".meter-ch0", meterContainer).html(meter.ch0.toFixed(2));
+                            $(".meter-ch1", meterContainer).html(meter.ch1.toFixed(2));
                             $(".meter-delta0", meterContainer).html(meter.delta0/1000);
                             $(".meter-delta1", meterContainer).html(meter.delta1/1000);
                             $(".meter-check0", meterContainer).html(meter.check0 != "" ? this.dateTime(meter.check0*1000, {day: "2-digit", month: "2-digit", year: "numeric"}) : "");
