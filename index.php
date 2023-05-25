@@ -544,11 +544,22 @@
                             data: chartData.map(el => this.chartType == "delta" ? el.delta1 : el.ch1)
                         }
                     ],
+                    yaxis: {
+                        title: {
+                            text: this.chartType == "delta" ? "Литры" : "Куб. метры",
+                        },
+                        labels: {
+                            formatter: (value) => value.toFixed(0) + (this.chartType == "delta" ? " л." : " м\u00B3")
+                        }
+                    },
                     xaxis: {
                         type: this.chartType == "delta" ? "category" : "numeric",
                         categories: chartData.map(el => el.datetime*1000),
                         tickAmount: ["y", "hy", "qtr"].includes(this.chartPeriod) ? 6 : "dataPoints",
                         tickPlacement: this.chartType == "delta" ? "between" : "on",
+                        title: {
+                            text:"Дата"
+                        },
                         labels: {
                             formatter: (value) => this.dateTime(value, new Date().getFullYear() == new Date(chartPeriod.start).getFullYear() ? {day: "2-digit", month: "2-digit"} : {day: "2-digit", month: "2-digit", year: "2-digit"})
                         },
