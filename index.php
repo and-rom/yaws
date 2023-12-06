@@ -7,7 +7,7 @@
         $login = rtrim(fgets($stdin));
         echo "Password: ";
         $password = password_hash(rtrim(fgets($stdin)), PASSWORD_DEFAULT);
-        file_put_contents("./.htpassword", $login.":".$password);
+        file_put_contents("./.htpassword", $login.":".$password.PHP_EOL);
         exit;
     }
 
